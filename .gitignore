@@ -1,0 +1,21 @@
+bin/
+*.DS_Store
+build
+target
+.gradle
+.gradle*
+out
+.idea
+work
+.h2
+WebContent/.idea/
+*.log
+*.log.*
+*.swp
+*.swo
+
+*.class
+
+# Package Files #
+*.war
+*.ear

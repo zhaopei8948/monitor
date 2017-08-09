@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>监控系统</title>
+	<link rel="stylesheet" th:href="@{/vendors/bootstrap/dist/css/bootstrap.min.css}" />
+	<link rel="stylesheet" th:href="@{/vendors/font-awesome/css/font-awesome.min.css}" />
+	<link rel="stylesheet" th:href="@{/vendors/nprogress/nprogress.css}" />
+	<link rel="stylesheet" th:href="@{/vendors/iCheck/skins/flat/green.css}" />
+	<link rel="stylesheet" th:href="@{/vendors/datatables.net-bs/css/dataTables.bootstrap.css}" />
+	<link rel="stylesheet" th:href="@{/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css}" />
+	<link rel="stylesheet" th:href="@{/css/custom.css}" />
+	<script type="text/javascript" th:src="@{/vendors/jquery/dist/jquery.min.js}"></script>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+				<a href="/" class="site_title"><i class="fa fa-paw"></i> 
+					<span>监控系统</span>
+				</a>
+			</div>
+
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile">
+              <div class="profile_pic">
+                <img src="/images/img.jpg" alt="..." class="img-circle profile_img">
+              </div>
+              <div class="profile_info">
+                <span>欢迎</span>
+                <h2>管理员</h2>
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+
+            <br />
+
+			<!-- sidebar menu -->
+			<div layout:fragment="sidebar-menu" id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+				<div class="menu_section">
+					<h3>菜单</h3>
+					<ul class="nav side-menu">
+						<li><a href="/servers/info"><i class="fa fa-home"></i>服务器监控</a>
+                            <ul class="nav child_menu">
+                                <li th:each="serverSystem : ${serverSystemList}">
+                                    <a th:href="@{'/servers/info/' + ${serverSystem.ip} + '/' + ${serverSystem.port}}" th:text="${serverSystem.description}"></a>
+                                </li>
+                            </ul>
+                        </li>
+					</ul>
+				</div>
+			</div>
+			<!-- /sidebar menu -->
+
+            <!-- /menu footer buttons -->
+            <div class="sidebar-footer hidden-small">
+              <a data-toggle="tooltip" data-placement="top" title="Settings">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="Lock">
+                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+              </a>
+              <a href="javascript:logout();" data-toggle="tooltip" data-placement="top" title="退出">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+              </a>
+            </div>
+            <!-- /menu footer buttons -->
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <img src="/images/img.jpg" alt="">管理员
+                    <span class=" fa fa-angle-down"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a href="javascript:;">个人信息</a></li>
+                    <li><a href="/">数据查询</a></li>
+                    <li>
+                      <a href="javascript:;">
+                        <span class="badge bg-red pull-right">50%</span>
+                        <span>设置</span>
+                      </a>
+                    </li>
+                    <li><a href="/versions">问题管理</a></li>
+					<li><a href="javascript:logout();"><i class="fa fa-sign-out pull-right"></i>退出</a></li>
+                  </ul>
+                </li>
+
+                <li role="presentation" class="dropdown">
+                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-envelope-o"></i>
+                    <span class="badge bg-green">6</span>
+                  </a>
+                  <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                    <li>
+                      <a>
+                        <span class="image"><img src="/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image"><img src="/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image"><img src="/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image"><img src="/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="text-center">
+                        <a>
+                          <strong>See All Alerts</strong>
+                          <i class="fa fa-angle-right"></i>
+                        </a>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+			<div layout:fragment="header" class="page-title"></div>
+			<div class="clearfix"></div>
+			<div layout:fragment="content" class="row">
+                <div th:if="${null != serverInfo}" class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_content">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+                                    <h1 class="red" th:text="${serverInfo.serverSystem.description} + ' IP: ' + ${serverInfo.serverSystem.ip} + ' 端口: ' + ${serverInfo.serverSystem.port}"></h1>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-md-4 col-sm-4 col-xs-12 profile_details">
+                                    <div class="well profile_view">
+                                        <div class="col-sm-12">
+                                            <h4 class="brief"><i>CPU性能指标</i></h4>
+                                            <div class="left col-xs-7">
+                                                <h2>CPU总的使用情况</h2>
+                                                <p><strong>总使用率: </strong>
+                                                    <span th:text="${#numbers.formatDecimal(serverInfo.cpuPerc.combined * 100, 1, 2)} + '%'"></span>
+                                                </p>
+                                                <ul class="list-unstyled">
+                                                    <li>用户使用率: <span th:text="${#numbers.formatDecimal(serverInfo.cpuPerc.user * 100, 1, 2)} + '%'"></span></li>
+                                                    <li>系统使用率: <span th:text="${#numbers.formatDecimal(serverInfo.cpuPerc.sys * 100, 1, 2)} + '%'"></span></li>
+                                                    <li>当前等待率: <span th:text="${#numbers.formatDecimal(serverInfo.cpuPerc.wait * 100, 1, 2)} + '%'"></span></li>
+                                                    <li>当前错误率: <span th:text="${#numbers.formatDecimal(serverInfo.cpuPerc.nice * 100, 1, 2)} + '%'"></span></li>
+                                                    <li>当前空闲率: <span th:text="${#numbers.formatDecimal(serverInfo.cpuPerc.idle * 100, 1, 2)} + '%'"></span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 bottom text-center">
+                                            <div class="col-xs-12 col-sm-6 emphasis">
+                                                <p class="ratings">
+                                                    <a>4.0</a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star-o"></span></a>
+                                                </p>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 emphasis">
+                                                <button type="button" class="btn btn-success btn-xs"> <i class="fa fa-user">
+                                                    </i> <i class="fa fa-comments-o"></i> </button>
+                                                <button type="button" class="btn btn-primary btn-xs">
+                                                    <i class="fa fa-user"> </i> View Profile
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12 profile_details">
+                                    <div class="well profile_view">
+                                        <div class="col-sm-12">
+                                            <h4 class="brief"><i>内存空间情况</i></h4>
+                                            <div class="left col-xs-7">
+                                                <h2>内存总的使用情况</h2>
+                                                <p><strong>总空间: </strong>
+                                                    <span th:text="${#numbers.formatDecimal(serverInfo.mem.total / 1024.0 / 1024.0 / 1024.0, 1, 2)} + 'GB'"></span>
+                                                </p>
+                                                <ul class="list-unstyled">
+                                                    <li>已使用: <span th:text="${#numbers.formatDecimal(serverInfo.mem.used / 1024.0 / 1024.0 / 1024.0, 1, 2)} + 'GB'"></span></li>
+                                                    <li>剩余: <span th:text="${#numbers.formatDecimal(serverInfo.mem.free / 1024.0 / 1024.0 / 1024.0, 1, 2)} + 'GB'"></span></li>
+                                                    <li>实际已使用: <span th:text="${#numbers.formatDecimal(serverInfo.mem.actualUsed / 1024.0 / 1024.0 / 1024.0, 1, 2)} + 'GB'"></span></li>
+                                                    <li>实际剩余: <span th:text="${#numbers.formatDecimal(serverInfo.mem.actualFree / 1024.0 / 1024.0 / 1024.0, 1, 2)} + 'GB'"></span></li>
+                                                    <li>已使用百分比: <span th:text="${#numbers.formatDecimal(serverInfo.mem.usedPercent, 1, 2)} + '%'"></span></li>
+                                                    <li>剩余百分比: <span th:text="${#numbers.formatDecimal(serverInfo.mem.freePercent, 1, 2)} + '%'"></span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 bottom text-center">
+                                            <div class="col-xs-12 col-sm-6 emphasis">
+                                                <p class="ratings">
+                                                    <a>4.0</a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star-o"></span></a>
+                                                </p>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 emphasis">
+                                                <button type="button" class="btn btn-success btn-xs"> <i class="fa fa-user">
+                                                    </i> <i class="fa fa-comments-o"></i> </button>
+                                                <button type="button" class="btn btn-primary btn-xs">
+                                                    <i class="fa fa-user"> </i> View Profile
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-12 profile_details">
+                                    <div class="well profile_view">
+                                        <div class="col-sm-12">
+                                            <h4 class="brief"><i>操作系统情况</i></h4>
+                                            <div class="left col-xs-7">
+                                                <h2>操作系统基本信息</h2>
+                                                <p><strong>系统名称: </strong>
+                                                    <span th:text="${serverInfo.operatingSystem.name}"></span>
+                                                </p>
+                                                <ul class="list-unstyled">
+                                                    <li>系统版本号: <span th:text="${serverInfo.operatingSystem.version}"></span></li>
+                                                    <li>生产厂商: <span th:text="${serverInfo.operatingSystem.vendor}"></span></li>
+                                                    <li>生产版本: <span th:text="${serverInfo.operatingSystem.vendorVersion}"></span></li>
+                                                    <li>描述: <span th:text="${serverInfo.operatingSystem.description}"></span></li>
+                                                    <li>系统架构: <span th:text="${serverInfo.operatingSystem.arch}"></span></li>
+                                                    <li>补丁级别: <span th:text="${serverInfo.operatingSystem.patchLevel}"></span></li>
+                                                    <li>系统类型: <span th:text="${serverInfo.operatingSystem.dataModel} + '位'"></span></li>
+                                                    <li>CPU指令类型: <span th:text="${serverInfo.operatingSystem.cpuEndian}"></span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 bottom text-center">
+                                            <div class="col-xs-12 col-sm-6 emphasis">
+                                                <p class="ratings">
+                                                    <a>4.0</a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star-o"></span></a>
+                                                </p>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 emphasis">
+                                                <button type="button" class="btn btn-success btn-xs"> <i class="fa fa-user">
+                                                    </i> <i class="fa fa-comments-o"></i> </button>
+                                                <button type="button" class="btn btn-primary btn-xs">
+                                                    <i class="fa fa-user"> </i> View Profile
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:each="fileSystemInfo, stat: ${serverInfo.fileSystemInfoList}" class="col-md-4 col-sm-4 col-xs-12 profile_details">
+                                    <div class="well profile_view">
+                                        <div class="col-sm-12">
+                                            <h4 class="brief">第<i th:text="${stat.count}"></i>块硬盘情况</h4>
+                                            <div class="left col-xs-7">
+                                                <h2>硬盘总体信息</h2>
+                                                <p><strong>硬盘名称: </strong>
+                                                    <span th:text="${fileSystemInfo.fileSystem.devName}"></span>
+                                                </p>
+                                                <ul class="list-unstyled">
+                                                    <li>硬盘路径: <span th:text="${fileSystemInfo.fileSystem.dirName}"></span></li>
+                                                    <li>硬盘文件系统类型: <span th:text="${fileSystemInfo.fileSystem.sysTypeName}"></span></li>
+                                                    <li>硬盘类型: <span th:text="${fileSystemInfo.fileSystem.typeName}"></span></li>
+                                                    <li>硬盘总空间: <span th:text="${#numbers.formatDecimal(fileSystemInfo.fileSystemUsage.total / 1024.0 / 1024.0, 1, 3)} + 'GB'"></span></li>
+                                                    <li>硬盘剩余空间: <span th:text="${#numbers.formatDecimal(fileSystemInfo.fileSystemUsage.free / 1024.0 / 1024.0, 1, 3)} + 'GB'"></span></li>
+                                                    <li>硬盘可使用空间: <span th:text="${#numbers.formatDecimal(fileSystemInfo.fileSystemUsage.avail / 1024.0 / 1024.0, 1, 3)} + 'GB'"></span></li>
+                                                    <li>硬盘已使用空间: <span th:text="${#numbers.formatDecimal(fileSystemInfo.fileSystemUsage.used / 1024.0 / 1024.0, 1, 3)} + 'GB'"></span></li>
+                                                    <li>硬盘已使用率: <span th:text="${#numbers.formatDecimal(fileSystemInfo.fileSystemUsage.usePercent * 100, 1, 2)} + '%'"></span></li>
+                                                    <li>硬盘读出: <span th:text="${fileSystemInfo.fileSystemUsage.diskReads}"></span></li>
+                                                    <li>硬盘写入: <span th:text="${fileSystemInfo.fileSystemUsage.diskWrites}"></span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 bottom text-center">
+                                            <div class="col-xs-12 col-sm-6 emphasis">
+                                                <p class="ratings">
+                                                    <a>4.0</a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star-o"></span></a>
+                                                </p>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 emphasis">
+                                                <button type="button" class="btn btn-success btn-xs"> <i class="fa fa-user">
+                                                    </i> <i class="fa fa-comments-o"></i> </button>
+                                                <button type="button" class="btn btn-primary btn-xs">
+                                                    <i class="fa fa-user"> </i> View Profile
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:each="netInterfaceInfo, stat : ${serverInfo.netInterfaceInfoList}" class="col-md-4 col-sm-4 col-xs-12 profile_details"
+                                        th:if="${'0.0.0.0' != netInterfaceInfo.netInterfaceConfig.address && '127.0.0.1' != netInterfaceInfo.netInterfaceConfig.address}">
+                                    <div class="well profile_view">
+                                        <div class="col-sm-12">
+                                            <h4 class="brief">第<i th:text="${stat.count}"></i>块网卡信息</h4>
+                                            <div class="left col-xs-7">
+                                                <h2>网卡信息</h2>
+                                                <p><strong>网络设备名</strong>
+                                                    <span th:text="${netInterfaceInfo.name}"></span>
+                                                </p>
+                                                <ul class="list-unstyled">
+                                                    <li>IP地址: <span th:text="${netInterfaceInfo.netInterfaceConfig.address}"></span></li>
+                                                    <li>网关广播地址: <span th:text="${netInterfaceInfo.netInterfaceConfig.broadcast}"></span></li>
+                                                    <li>网卡MAC地址: <span th:text="${netInterfaceInfo.netInterfaceConfig.hwaddr}"></span></li>
+                                                    <li>子网掩码: <span th:text="${netInterfaceInfo.netInterfaceConfig.netmask}"></span></li>
+                                                    <li>网卡描述信息: <span th:text="${netInterfaceInfo.netInterfaceConfig.description}"></span></li>
+                                                    <li>网卡类型: <span th:text="${netInterfaceInfo.netInterfaceConfig.type}"></span></li>
+                                                    <li>接收的总包裹数: <span th:text="${netInterfaceInfo.netInterfaceStat.rxPackets}"></span></li>
+                                                    <li>发送的总包裹数: <span th:text="${netInterfaceInfo.netInterfaceStat.txPackets}"></span></li>
+                                                    <li>接收时丢弃的包裹数: <span th:text="${netInterfaceInfo.netInterfaceStat.rxDropped}"></span></li>
+                                                    <li>发送时丢弃的包裹数: <span th:text="${netInterfaceInfo.netInterfaceStat.txDropped}"></span></li>
+                                                    <li>接收到的总字节数: <span th:text="${#numbers.formatDecimal(netInterfaceInfo.netInterfaceStat.rxBytes / 1024.0, 1, 3)} + 'KB'"></span></li>
+                                                    <li>发送的总字节数: <span th:text="${#numbers.formatDecimal(netInterfaceInfo.netInterfaceStat.txBytes / 1024.0, 1, 3)} + 'KB'"></span></li>
+                                                    <li>接收到的错误包数: <span th:text="${netInterfaceInfo.netInterfaceStat.rxErrors}"></span></li>
+                                                    <li>发送的错误包数: <span th:text="${netInterfaceInfo.netInterfaceStat.txErrors}"></span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 bottom text-center">
+                                            <div class="col-xs-12 col-sm-6 emphasis">
+                                                <p class="ratings">
+                                                    <a>4.0</a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star"></span></a>
+                                                    <a href="#"><span class="fa fa-star-o"></span></a>
+                                                </p>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 emphasis">
+                                                <button type="button" class="btn btn-success btn-xs"> <i class="fa fa-user">
+                                                    </i> <i class="fa fa-comments-o"></i> </button>
+                                                <button type="button" class="btn btn-primary btn-xs">
+                                                    <i class="fa fa-user"> </i> View Profile
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>
+	<form id="form_logout" th:action="@{/logout}" method="POST">
+	</form>
+
+	<script type="text/javascript" th:src="@{/vendors/bootstrap/js/collapse.js}"></script>
+	<script type="text/javascript" th:src="@{/vendors/bootstrap/js/transition.js}"></script>
+	<script type="text/javascript" th:src="@{/vendors/bootstrap/dist/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/vendors/fastclick/lib/fastclick.js}"></script>
+	<script type="text/javascript" th:src="@{/vendors/nprogress/nprogress.js}"></script>
+	<script type="text/javascript" th:src="@{/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js}"></script>
+	<script type="text/javascript" th:src="@{/vendors/iCheck/icheck.min.js}"></script>
+	<script type="text/javascript" th:src="@{/vendors/parsleyjs/dist/parsley.min.js}"></script>
+	<script type="text/javascript" th:src="@{/vendors/Chart.js/dist/Chart.min.js}"></script>
+	<script type="text/javascript" th:src="@{/vendors/datatables.net/js/jquery.dataTables.min.js}"></script>
+	<script type="text/javascript" th:src="@{/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/vendors/datatables.net-responsive/js/dataTables.responsive.min.js}"></script>
+	<script type="text/javascript" th:src="@{/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js}"></script>
+	<script type="text/javascript" th:src="@{/js/custom.js}"></script>
+  </body>
+</html>
