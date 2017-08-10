@@ -33,4 +33,19 @@ public class ServerServiceImpl implements ServerService {
 		return this.serverRepository.findAll();
 	}
 
+	@Override
+	public Server findByIp(String ip) {
+		return this.serverRepository.findByIp(ip);
+	}
+
+	@Override
+	public void save(Iterable<Server> iterable) {
+		this.serverRepository.save(iterable);
+	}
+
+	@Override
+	public Long countByIp(String ip) {
+		return this.serverRepository.countByIp(ip);
+	}
+
 }

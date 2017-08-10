@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<servers>
+    <server>
+        <ip>10.10.10.2</ip>
+        <port>18948</port>
+        <description>服务器2</description>
+        <cpuThreshold>10</cpuThreshold>
+        <memoryThreshold>15</memoryThreshold>
+        <hardDiskThreshold>25</hardDiskThreshold>
+    </server>
+    <server>
+        <ip>10.10.10.3</ip>
+        <port>18948</port>
+        <description>服务器3</description>
+        <cpuThreshold>1</cpuThreshold>
+        <memoryThreshold>2</memoryThreshold>
+        <hardDiskThreshold>3</hardDiskThreshold>
+    </server>
+</servers>

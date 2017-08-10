@@ -9,5 +9,11 @@ public interface ServerService extends Serializable {
 
 	void save(Server server);
 	
+	void save(Iterable<Server> iterable);
+	
 	List<Server> findAll();
+	
+	Server findByIp(String ip);
+	
+	Long countByIp(String ip);
 }

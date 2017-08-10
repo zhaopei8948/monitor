@@ -7,9 +7,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "server_list")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Server implements Serializable {
 
 	/**
@@ -17,6 +23,7 @@ public class Server implements Serializable {
 	 */
 	private static final long serialVersionUID = 8119728299119023931L;
 
+	@XmlTransient
 	private Long id;
 	
 	private String ip;
@@ -41,6 +48,7 @@ public class Server implements Serializable {
 		this.id = id;
 	}
 
+	@Column(unique = true)
 	public String getIp() {
 		return ip;
 	}

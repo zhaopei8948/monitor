@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:fragment="common_header(title, links, scripts)">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title th:replace="${title}">The awesome application</title>
+
+        <link rel="stylesheet" th:href="@{/vendors/bootstrap/dist/css/bootstrap.min.css}" />
+        <link rel="stylesheet" th:href="@{/vendors/font-awesome/css/font-awesome.min.css}" />
+        <link rel="stylesheet" th:href="@{/vendors/nprogress/nprogress.css}" />
+        <link rel="stylesheet" th:href="@{/vendors/iCheck/skins/flat/green.css}" />
+        <link rel="stylesheet" th:href="@{/vendors/datatables.net-bs/css/dataTables.bootstrap.css}" />
+        <link rel="stylesheet" th:href="@{/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css}" />
+        <link rel="stylesheet" th:href="@{/css/custom.css}" />
+        <th:block th:replace="${links}" />
+
+        <script type="text/javascript" th:src="@{/vendors/jquery/dist/jquery.min.js}"></script>
+        <th:block th:replace="${scripts}" />
+
+    </head>
+	<body>
+        <div th:fragment="common_js(scripts)">
+            <script type="text/javascript" th:src="@{/vendors/bootstrap/js/collapse.js}"></script>
+            <script type="text/javascript" th:src="@{/vendors/bootstrap/js/transition.js}"></script>
+            <script type="text/javascript" th:src="@{/vendors/bootstrap/dist/js/bootstrap.min.js}"></script>
+            <script type="text/javascript" th:src="@{/vendors/fastclick/lib/fastclick.js}"></script>
+            <script type="text/javascript" th:src="@{/vendors/nprogress/nprogress.js}"></script>
+            <script type="text/javascript" th:src="@{/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js}"></script>
+            <script type="text/javascript" th:src="@{/vendors/iCheck/icheck.min.js}"></script>
+            <script type="text/javascript" th:src="@{/vendors/parsleyjs/dist/parsley.min.js}"></script>
+            <script type="text/javascript" th:src="@{/vendors/Chart.js/dist/Chart.min.js}"></script>
+            <script type="text/javascript" th:src="@{/vendors/datatables.net/js/jquery.dataTables.min.js}"></script>
+            <script type="text/javascript" th:src="@{/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+            <script type="text/javascript" th:src="@{/vendors/datatables.net-responsive/js/dataTables.responsive.min.js}"></script>
+            <script type="text/javascript" th:src="@{/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js}"></script>
+            <script type="text/javascript" th:src="@{/js/custom.js}"></script>
+        </div>
+		<div th:fragment="content-header(titleLeft, formAction)">
+			<div class="title_left">
+				<h3 th:text="${titleLeft}"></h3>
+			</div>
+			<div class="title_right">
+				<div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+					<form th:action="${formAction}">
+						<div class="input-group">
+							<input type="text" class="form-control" name="searchText" placeholder="输入关键字...">
+							<span class="input-group-btn">
+								<button class="btn btn-default">搜索</button>
+							</span>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<ul th:fragment="page-info(formId, pageInfo, pageList)" class="pagination pagination-lg pull-right">
+			<li><a>共<span th:text="${pageInfo.total}" class="red">1</span>条</a></li>
+			<li th:class="${0 == pageInfo.pages} ? 'disabled'">
+				<a href="javascript:void(0)"
+						th:onclick="${0 < pageInfo.pages} ? 'goToPageNum(\'' + ${formId} + '\', 1);'">首页</a>
+			</li>
+			<li th:class="${pageInfo.isFirstPage} ? 'disabled'">
+				<a href="javascript:void(0)"
+						th:onclick="${!pageInfo.isFirstPage} ? 'goToPageNum(\'' + ${formId} + '\', ' + ${pageInfo.prePage} + ');'">上页</a>
+			</li>
+			<li th:each="page : ${pageList}"
+					th:class="${page == pageInfo.pageNum} ? 'active'">
+				<a href="javascript:void(0)" th:text="${page}"
+						th:onclick="'goToPageNum(\'' + ${formId} + '\',' + ${page} + ');'"></a>
+			</li>
+			<li th:class="${pageInfo.isLastPage} ? 'disabled'">
+				<a href="javascript:void(0)"
+						th:onclick="${!pageInfo.isLastPage} ? 'goToPageNum(\'' + ${formId} + '\', ' + ${pageInfo.nextPage} + ');'">下页</a>
+			</li>
+			<li th:class="${0 == pageInfo.pages} ? 'disabled'">
+				<a href="javascript:void(0)"
+						th:onclick="${0 < pageInfo.pages} ? 'goToPageNum(\'' + ${formId} + '\', ' + ${pageInfo.pages} + ');'">尾页</a>
+			</li>
+			<li><a th:text="'第' + ${pageInfo.pageNum} + '页'">第1页</a></li>
+			<li><a th:text="'共' + ${pageInfo.pages} + '页'">共1页</a></li>
+			<li><input type="number" class="input-lg change-page-num" style="width:100px;"  th:value="${pageInfo.pageNum}" /></li>
+			<li><button  class="btn-lg btn btn-info" type="button" th:onclick="'goToPageNum(\'' + ${formId} + '\', $(\'.change-page-num\').val(), ' + ${pageInfo.pages} + ')'">跳转</button></li>
+			<li>
+				<select title="显示条数" class="input-lg" style="width:60px;" th:onchange="'changePageSize(\'' + ${formId} + '\', this.value);'">
+					<option th:each="pageSize : ${pageSizeList}" th:text="${pageSize}"
+							th:value="${pageSize}" th:selected="${pageSize == pageInfo.pageSize} ? 'selected'"></option>
+				</select>
+			</li>
+		</ul>
+
+		<span th:fragment="condition-text(labelText, name, value)">
+			<label class="col-sm-1 control-label" th:text="${labelText}"></label>
+			<div class="col-sm-2">
+				<input class="form-control" type="text" th:name="${name}" th:placeholder="${labelText}"
+						th:value="${value}" />
+			</div>
+		</span>
+
+		<span th:fragment="condition-map(labelText, name, value, mapData)">
+			<label class="col-sm-1 control-label" th:text="${labelText}"></label>
+			<div class="col-sm-2">
+				<select class="form-control" th:name="${name}">
+					<option th:each="stat : ${mapData}" th:value="${stat.key}"
+							th:text="${stat.key} + '-' + ${stat.value}"
+							th:selected="${stat.key == value} ? 'selected'"></option>
+				</select>
+			</div>
+		</span>
+
+		<span th:fragment="condition-date(labelText, name, value)">
+			<label class="col-sm-1 control-label" th:text="${labelText}"></label>
+			<div class="col-sm-2">
+				<div class='input-group date input-date'>
+					<input type='text' class="form-control" th:name="${name}"
+							th:value="${value}" th:placeholder="${labelText}" />
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-time"></span>
+					</span>
+				</div>
+			</div>
+		</span>
+
+		<div th:fragment="form-line(labelText, name, required, value)" class="form-group">
+			<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+				<span th:text="${labelText}"></span>
+				<span th:if="${required}" class="required">*</span>
+			</label>
+			<div class="col-md-6 col-sm-6 col-xs-12">
+				<input type="text" th:name="${name}" th:required="${required} ? 'required'" class="form-control col-md-7 col-xs-12" th:value="${value}">
+			</div>
+		</div>
+
+		<div th:fragment="form-line-select(labelText, name, required, value, mapData)" class="form-group">
+			<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+				<span th:text="${labelText}"></span>
+				<span th:if="${required}" class="required">*</span>
+			</label>
+			<div class="col-md-6 col-sm-6 col-xs-12">
+				<select class="form-control" th:name="${name}" th:required="${required} ? 'required'">
+					<option th:each="stat : ${mapData}" th:value="${stat.key}"
+							th:text="${stat.key} + '-' + ${stat.value}"
+							th:selected="${stat.key == value} ? 'selected'"></option>
+				</select>
+			</div>
+		</div>
+
+		<div th:fragment="form-line-textarea(labelText, name, required, value)" class="form-group">
+			<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+				<span th:text="${labelText}"></span>
+				<span th:if="${required}" class="required">*</span>
+			</label>
+			<div class="col-md-6 col-sm-6 col-xs-12">
+				<textarea th:name="${name}" th:required="${required} ? 'required'" class="form-control" rows="3" th:text="${value}"></textarea>
+			</div>
+		</div>
+
+		<div th:fragment="form-line-date(labelText, name, required, value)" class="form-group">
+			<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+				<span th:text="${labelText}"></span>
+				<span th:if="${required}" class="required">*</span>
+			</label>
+			<div class="col-md-6 col-sm-6 col-xs-12">
+				<div class='input-group date input-date-time'>
+					<input type="text" th:name="${name}" th:required="${required} ? 'required'" class="form-control col-md-7 col-xs-12" th:value="${value}">
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<div th:fragment="form-radio(labelText, name, trueValue, trueText, falseValue, falseText, defaultValue)" class="form-group">
+			<label class="control-label col-md-3 col-sm-3 col-xs-12" th:text="${labelText}"></label>
+			<div class="col-md-6 col-sm-6 col-xs-12">
+				<div class="btn-group" data-toggle="buttons">
+					<label th:class="${defaultValue} ? ' btn btn-primary active' : 'btn btn-primary'" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+						<input type="radio" th:checked="${defaultValue} ? 'checked'" th:name="${name}" th:value="${trueValue}" data-parsley-multiple="gender" th:text="${trueText}">
+					</label>
+					<label th:class="${!defaultValue} ? 'btn btn-default active' : 'btn btn-default'" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+						<input type="radio" th:checked="${!defaultValue} ? 'checked'" th:name="${name}" th:value="${falseValue}" data-parsley-multiple="gender" th:text="${falseText}">
+					</label>
+				</div>
+			</div>
+		</div>
+
+        <!-- top navigation -->
+        <div class="top_nav" th:fragment="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <img src="/images/img.jpg" alt="" />管理员
+                    <span class=" fa fa-angle-down"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a href="javascript:;">个人信息</a></li>
+                    <li><a href="/">数据查询</a></li>
+                    <li>
+                      <a href="javascript:;">
+                        <span class="badge bg-red pull-right">50%</span>
+                        <span>设置</span>
+                      </a>
+                    </li>
+                    <li><a href="/versions">问题管理</a></li>
+					<li><a href="javascript:logout();"><i class="fa fa-sign-out pull-right"></i>退出</a></li>
+                  </ul>
+                </li>
+
+                <li role="presentation" class="dropdown">
+                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-envelope-o"></i>
+                    <span class="badge bg-green">6</span>
+                  </a>
+                  <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                    <li>
+                      <a>
+                        <span class="image"><img src="/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image"><img src="/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image"><img src="/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <span class="image"><img src="/images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="text-center">
+                        <a>
+                          <strong>See All Alerts</strong>
+                          <i class="fa fa-angle-right"></i>
+                        </a>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- footer content -->
+        <footer th:fragment="footer">
+          <div class="pull-right">
+            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+
+        <div class="col-md-3 left_col" th:fragment="left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+				<a href="/" class="site_title"><i class="fa fa-paw"></i> 
+					<span>监控系统</span>
+				</a>
+			</div>
+
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile">
+              <div class="profile_pic">
+                <img src="/images/img.jpg" alt="..." class="img-circle profile_img" />
+              </div>
+              <div class="profile_info">
+                <span>欢迎</span>
+                <h2>管理员</h2>
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+
+            <br />
+
+			<!-- sidebar menu -->
+			<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+				<div class="menu_section">
+                    <h3>菜单</h3>
+                    <ul class="nav side-menu">
+                        <li><a><i class="fa fa-home"></i>服务器管理<span class="fa fa-chevron-down"></span></a>
+                             <ul class="nav child_menu">
+                                 <li><a href="/taxes">服务器查询</a></li>
+                             </ul>
+                         </li>
+						<li class="active"><a><i class="fa fa-home"></i>服务器监控</a>
+                            <ul class="nav child_menu" style="display: block;">
+                                <li th:each="server : ${serverList}">
+                                    <a th:href="@{'/?ip=' + ${server.ip} + '&amp;port=' + ${server.port}}" th:text="${server.description}"></a>
+                                </li>
+                            </ul>
+                        </li>
+					</ul>
+				</div>
+			</div>
+			<!-- /sidebar menu -->
+
+            <!-- /menu footer buttons -->
+            <div class="sidebar-footer hidden-small">
+              <a data-toggle="tooltip" data-placement="top" title="Settings">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="Lock">
+                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+              </a>
+              <a href="javascript:logout();" data-toggle="tooltip" data-placement="top" title="退出">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+              </a>
+            </div>
+            <!-- /menu footer buttons -->
+          </div>
+        </div>
+		
+	</body>
+</html>
