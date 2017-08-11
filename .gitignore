@@ -9,6 +9,7 @@ out
 work
 .h2
 WebContent/.idea/
+alert
 *.log
 *.log.*
 *.swp
