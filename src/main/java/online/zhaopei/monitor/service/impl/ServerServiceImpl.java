@@ -59,4 +59,9 @@ public class ServerServiceImpl implements ServerService {
 		return this.serverRepository.getOne(id);
 	}
 
+	@Override
+	public void delete(Long id) {
+		this.serverRepository.delete(id);
+	}
+
 }

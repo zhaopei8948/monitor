@@ -99,6 +99,14 @@ public class ServersController {
 		return new ModelAndView("redirect:/list");
 	}
 	
+	@RequestMapping("/delete/{id}")
+	@ResponseBody
+	public ModelAndView save(@PathVariable Long id) {
+		this.serverService.delete(id);
+		CommonUtil.generateSetting(this.serverService.findAll());
+		return new ModelAndView("redirect:/list");
+	}
+	
 	@RequestMapping("/findAll")
 	@ResponseBody
 	public List<Server> findAll() {

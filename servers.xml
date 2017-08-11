@@ -8,12 +8,4 @@
         <memoryThreshold>1</memoryThreshold>
         <hardDiskThreshold>1</hardDiskThreshold>
     </server>
-    <server>
-        <ip>10.10.10.3</ip>
-        <port>18948</port>
-        <description>服务器3</description>
-        <cpuThreshold>1</cpuThreshold>
-        <memoryThreshold>2</memoryThreshold>
-        <hardDiskThreshold>3</hardDiskThreshold>
-    </server>
 </servers>

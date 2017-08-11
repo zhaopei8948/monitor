@@ -20,4 +20,6 @@ public interface ServerService extends Serializable {
 	Long countByIp(String ip);
 	
 	Server getOne(Long id);
+	
+	void delete(Long id);
 }
