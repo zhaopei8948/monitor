@@ -13,7 +13,11 @@ public interface ServerService extends Serializable {
 	
 	List<Server> findAll();
 	
+	List<Server> findServerList(Server server);
+	
 	Server findByIp(String ip);
 	
 	Long countByIp(String ip);
+	
+	Server getOne(Long id);
 }

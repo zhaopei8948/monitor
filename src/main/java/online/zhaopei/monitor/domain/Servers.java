@@ -17,6 +17,13 @@ public class Servers implements Serializable {
 	 */
 	private static final long serialVersionUID = -4024556523905289490L;
 
+	public Servers() {
+	}
+	
+	public Servers(List<Server> serverList) {
+		this.serverList = serverList;
+	}
+	
 	@XmlElement(name = "server")
 	private List<Server> serverList;
 

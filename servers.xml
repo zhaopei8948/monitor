@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <servers>
     <server>
-        <ip>10.10.10.2</ip>
+        <ip>172.16.0.161</ip>
         <port>18948</port>
-        <description>服务器2</description>
-        <cpuThreshold>10</cpuThreshold>
-        <memoryThreshold>15</memoryThreshold>
-        <hardDiskThreshold>25</hardDiskThreshold>
+        <description>RMQ队列服务器</description>
+        <cpuThreshold>1</cpuThreshold>
+        <memoryThreshold>1</memoryThreshold>
+        <hardDiskThreshold>1</hardDiskThreshold>
     </server>
     <server>
         <ip>10.10.10.3</ip>

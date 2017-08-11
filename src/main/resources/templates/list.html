@@ -34,42 +34,16 @@
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
-					<form class="form-horizontal search-form" role="form" action="/versions" method="GET"
-							id="version_form">
-						<input type="hidden" name="pageSize" th:value="${version.pageSize}" />
-						<input class="page-num" type="hidden" name="pageNum" th:value="${version.pageNum}" />
+					<form class="form-horizontal search-form" role="form" action="/list" method="GET"
+							id="server_form">
 						<div class="form-group">
-							<span th:replace="~{issue :: condition-text('版本名称', 'name', ${version.name}) }"></span>
-							<span th:replace="~{issue :: condition-text('版本号', 'versionNo', ${version.versionNo}) }"></span>
-							<span th:replace="~{issue :: condition-map('基于系统', 'baseSystem', ${version.baseSystem}, ${baseSystem}) }"></span>
-							<span th:replace="~{issue :: condition-map('是否更新测试', 'isUpdateTest', ${version.isUpdateTest}, ${trueFalseMap}) }"></span>
-						</div>
-						<div class="form-group">
-							<span th:replace="~{issue :: condition-map('是否更新正式', 'isUpdateFormal', ${version.isUpdateFormal}, ${trueFalseMap}) }"></span>
-							<span th:replace="~{issue :: condition-map('是否是补丁', 'isPatch', ${version.isPatch}, ${trueFalseMap}) }"></span>
-							<span th:replace="~{issue :: condition-map('测试结果', 'testResult', ${version.testResult}, ${passMap}) }"></span>
-							<span th:replace="~{issue :: condition-date('发送开始时间', 'beginSendTime', ${version.beginSendTime}) }"></span>
-						</div>
-						<div class="form-group">
-							<span th:replace="~{issue :: condition-date('发送结束时间', 'endSendTime', ${version.endSendTime}) }"></span>
-							<span th:replace="~{issue :: condition-date('发送时间', 'sendTimeStr', ${version.sendTimeStr}) }"></span>
-							<span th:replace="~{issue :: condition-date('开始更新测试时间', 'beginUpdateTestTime', ${version.beginUpdateTestTime}) }"></span>
-							<span th:replace="~{issue :: condition-date('结束更新测试时间', 'endUpdateTestTime', ${version.endUpdateTestTime}) }"></span>
-						</div>
-						<div class="form-group">
-							<span th:replace="~{issue :: condition-date('更新测试时间', 'updateTestTimeStr', ${version.updateTestTimeStr}) }"></span>
-							<span th:replace="~{issue :: condition-date('开始更新正式时间', 'beginUpdateFormalTime', ${version.beginUpdateFormalTime}) }"></span>
-							<span th:replace="~{issue :: condition-date('结束更新正式时间', 'endUpdateFormalTime', ${version.endUpdateFormalTime}) }"></span>
-							<span th:replace="~{issue :: condition-date('更新正式时间', 'updateFormalTimeStr', ${version.updateFormalTimeStr}) }"></span>
-						</div>
-						<div class="form-group">
-							<span th:replace="~{issue :: condition-date('开始测试时间', 'beginTestTime', ${version.beginTestTime}) }"></span>
-							<span th:replace="~{issue :: condition-date('结束测试时间', 'endTestTime', ${version.endTestTime}) }"></span>
-							<span th:replace="~{issue :: condition-date('测试时间', 'testTimeStr', ${version.testTimeStr}) }"></span>
+							<span th:replace="partial :: condition-text('ip', 'ip', ${server.ip})"></span>
+							<span th:replace="partial :: condition-text('端口', 'port', ${server.port})"></span>
+							<span th:replace="partial :: condition-text('描述', 'description', ${server.description})"></span>
 						</div>
 						<div class="pull-right form-group no-margin-right">
 							<button type="button" class="btn btn-round btn-info btn-lg" onclick="formSubmit(this);">搜索</button>
-							<button type="button" class="btn btn-round btn-warning btn-lg" onclick="resetForm('version_form')">重置</button>
+							<button type="button" class="btn btn-round btn-warning btn-lg" onclick="resetForm('server_form')">重置</button>
 						</div>
 					</form>
 				</div>
@@ -79,7 +53,7 @@
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
 				<div class="x_content" style="display: block;">
-					<a class="btn btn-app" href="/versions/new">
+					<a class="btn btn-app" href="/toSave">
 						<i class="fa fa-edit"></i>
 						新建
 					</a>
@@ -88,40 +62,31 @@
 		</div>
 
 		<div class="col-md-12 col-sm-12 col-xs-12">
-			<div th:replace="~{issue :: page-info('version_form', ${pageInfo}, ${pageList}) }"></div>
 			<table class="table table-striped jambo_table bulk_action">
 				<thead>
 					<tr class="headings">
-						<th class="column-title">版本名称</th>
-						<th class="column-title">基于系统</th>
-						<th class="column-title">发送时间</th>
-						<th class="column-title">是否更新测试</th>
-						<th class="column-title">更新测试时间</th>
-						<th class="column-title">是否更新正式</th>
-						<th class="column-title">更新正试时间</th>
-						<th class="column-title">测试结果</th>
-						<th class="column-title">测试时间</th>
-						<th class="column-title">是否是补丁</th>
+						<th class="column-title">ip</th>
+						<th class="column-title">端口</th>
+						<th class="column-title">描述</th>
+						<th class="column-title">CPU阀值</th>
+						<th class="column-title">硬盘阀值</th>
+						<th class="column-title">内存阀值</th>
 						<th class="column-title">操作</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:if="${versionList.empty}">
+					<tr th:if="${serverList.empty}">
 						<td colspan="30">没有数据</td>
 					</tr>
-					<tr th:each="version,stat : ${versionList}" th:class="${0 == stat.count % 2} ? 'odd pointer' : 'even pointer'">
-						<td th:text="${version.name}"></td>
-						<td th:text="${baseSystem[version.baseSystem]}"></td>
-						<td th:text="${#calendars.format(version.sendTime, 'YYYY-MM-dd HH:mm:ss')}"></td>
-						<td th:text="${trueFalseMap[version.isUpdateTest]}"></td>
-						<td th:text="${#calendars.format(version.updateTestTime, 'YYYY-MM-dd HH:mm:ss')}"></td>
-						<td th:text="${trueFalseMap[version.isUpdateFormal]}"></td>
-						<td th:text="${#calendars.format(version.updateFormalTime, 'YYYY-MM-dd HH:mm:ss')}"></td>
-						<td th:text="${passMap[version.testResult]}"></td>
-						<td th:text="${#calendars.format(version.testTime, 'YYYY-MM-dd HH:mm:ss')}"></td>
-						<td th:text="${trueFalseMap[version.isPatch]}"></td>
+					<tr th:each="server,stat : ${serverList}" th:class="${0 == stat.count % 2} ? 'odd pointer' : 'even pointer'">
+						<td th:text="${server.ip}"></td>
+						<td th:text="${server.port}"></td>
+						<td th:text="${server.description}"></td>
+						<td th:text="${server.cpuThreshold}"></td>
+						<td th:text="${server.hardDiskThreshold}"></td>
+						<td th:text="${server.memoryThreshold}"></td>
 						<td>
-							<a class="btn btn-info btn-round" th:href="@{'/versions/update/' + ${version.code} }">
+							<a class="btn btn-info btn-round" th:href="@{'/toUpdate/' + ${server.id} }">
 								<i class="fa fa-edit"> 修改</i>
 							</a>
 						</td>
@@ -129,21 +94,16 @@
 				</tbody>
 				<tfoot>
 					<tr class="headings">
-						<th class="column-title">版本名称</th>
-						<th class="column-title">基于系统</th>
-						<th class="column-title">发送时间</th>
-						<th class="column-title">是否更新测试</th>
-						<th class="column-title">更新测试时间</th>
-						<th class="column-title">是否更新正式</th>
-						<th class="column-title">更新正试时间</th>
-						<th class="column-title">测试结果</th>
-						<th class="column-title">测试时间</th>
-						<th class="column-title">是否是补丁</th>
+						<th class="column-title">ip</th>
+						<th class="column-title">端口</th>
+						<th class="column-title">描述</th>
+						<th class="column-title">CPU阀值</th>
+						<th class="column-title">硬盘阀值</th>
+						<th class="column-title">内存阀值</th>
 						<th class="column-title">操作</th>
 					</tr>
 				</tfoot>
 			</table>
-			<div th:replace="~{issue :: page-info('version_form', ${pageInfo}, ${pageList}) }"></div>
 		</div>
 	</div>
 <div th:replace="partial :: common_js(~{})"></div>

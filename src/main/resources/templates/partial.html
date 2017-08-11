@@ -37,6 +37,34 @@
             <script type="text/javascript" th:src="@{/vendors/datatables.net-responsive/js/dataTables.responsive.min.js}"></script>
             <script type="text/javascript" th:src="@{/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js}"></script>
             <script type="text/javascript" th:src="@{/js/custom.js}"></script>
+            <script type="text/javascript">
+                $(function() {
+                    $(document).keydown(function(event) {
+                        if (13 == event.keyCode) {
+                            $(".search-form").submit();
+                        }
+
+                        if (27 == event.keyCode) {
+                            resetForm();
+                        }
+                    });
+                });
+
+                function formSubmit(obj) {
+                    $(obj).parents("form").submit();
+                }
+
+                function resetForm(formId) {
+                    var formObj;
+                    if (undefined == formId) {
+                        formObj = $(".search-form");
+                    } else {
+                        formObj = $("#" + formId);
+                    }
+                    formObj.find("input").val("");
+                    formObj.find("select").val("");
+                }
+            </script>
         </div>
 		<div th:fragment="content-header(titleLeft, formAction)">
 			<div class="title_left">
@@ -323,10 +351,10 @@
                     <ul class="nav side-menu">
                         <li><a><i class="fa fa-home"></i>服务器管理<span class="fa fa-chevron-down"></span></a>
                              <ul class="nav child_menu">
-                                 <li><a href="/taxes">服务器查询</a></li>
+                                 <li><a href="/list">服务器查询</a></li>
                              </ul>
                          </li>
-						<li class="active"><a><i class="fa fa-home"></i>服务器监控</a>
+						<li class="active"><a><i class="fa fa-home"></i>服务器监控<span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu" style="display: block;">
                                 <li th:each="server : ${serverList}">
                                     <a th:href="@{'/?ip=' + ${server.ip} + '&amp;port=' + ${server.port}}" th:text="${server.description}"></a>
@@ -356,6 +384,7 @@
             <!-- /menu footer buttons -->
           </div>
         </div>
+    </div>
 		
 	</body>
 </html>

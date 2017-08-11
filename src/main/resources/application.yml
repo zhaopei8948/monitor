@@ -23,4 +23,4 @@ logging:
     file: monitor.log
     level:
         org.springframework: INFO
-        com.zhaopei.monitor: TRACE
+        online.zhaopei.monitor: TRACE
