@@ -8,8 +8,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @XmlRootElement(name = "servers")
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 public class Servers implements Serializable {
 
 	/**
@@ -18,15 +20,16 @@ public class Servers implements Serializable {
 	private static final long serialVersionUID = -4024556523905289490L;
 
 	public Servers() {
+		
 	}
 	
 	public Servers(List<Server> serverList) {
 		this.serverList = serverList;
 	}
 	
-	@XmlElement(name = "server")
 	private List<Server> serverList;
 
+	@XmlElement(name = "server")
 	public List<Server> getServerList() {
 		return serverList;
 	}

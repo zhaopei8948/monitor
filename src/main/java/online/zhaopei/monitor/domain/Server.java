@@ -1,21 +1,29 @@
 package online.zhaopei.monitor.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "server_list")
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Server implements Serializable {
 
 	/**
@@ -23,7 +31,7 @@ public class Server implements Serializable {
 	 */
 	private static final long serialVersionUID = 8119728299119023931L;
 
-	@XmlTransient
+	
 	private Long id;
 	
 	private String ip;
@@ -37,7 +45,10 @@ public class Server implements Serializable {
 	private Integer memoryThreshold;
 	
 	private Integer hardDiskThreshold;
+	
+	private List<Directory> directoryList;
 
+	@XmlTransient
 	@Id
 	@GeneratedValue
 	public Long getId() {
@@ -95,5 +106,15 @@ public class Server implements Serializable {
 
 	public void setHardDiskThreshold(Integer hardDiskThreshold) {
 		this.hardDiskThreshold = hardDiskThreshold;
+	}
+
+	@XmlElement(name = "directory")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "server", cascade = CascadeType.REMOVE)
+	public List<Directory> getDirectoryList() {
+		return directoryList;
+	}
+
+	public void setDirectoryList(List<Directory> directoryList) {
+		this.directoryList = directoryList;
 	}
 }

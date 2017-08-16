@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partial :: common_header(~{::title}, ~{}, ~{})">
+    <title>目录管理</title>
+</head>
+<body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div th:replace="partial :: left_col"></div>
+
+        <!-- top navigation -->
+        <div th:replace="partial :: top_nav"></div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="x_panel">
+				<div class="x_title">
+					<h2>搜索条件</h2>
+					<ul class="nav navbar-right panel_toolbox">
+						<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="#">Settings 1</a>
+								</li>
+								<li><a href="#">Settings 2</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content">
+					<form class="form-horizontal search-form" role="form" action="/list" method="GET"
+							id="directory_form">
+						<div class="form-group">
+							<span th:replace="partial :: condition-text('路径', 'ip', ${directory.path})"></span>
+							<span th:replace="partial :: condition-text('端口', 'port', ${directory.countThreshold})"></span>
+						</div>
+						<div class="pull-right form-group no-margin-right">
+							<button type="button" class="btn btn-round btn-info btn-lg" onclick="formSubmit(this);">搜索</button>
+							<button type="button" class="btn btn-round btn-warning btn-lg" onclick="resetForm('directory_form')">重置</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="x_panel">
+				<div class="x_content" style="display: block;">
+					<a class="btn btn-app" href="/directories/toSave">
+						<i class="fa fa-edit"></i>
+						新建
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<table class="table table-striped jambo_table bulk_action">
+				<thead>
+					<tr class="headings">
+						<th class="column-title">路径</th>
+						<th class="column-title">数据阀值</th>
+						<th class="column-title">是否包含子目录</th>
+						<th class="column-title">服务器信息</th>
+						<th class="column-title">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:if="${directoryList.empty}">
+						<td colspan="30">没有数据</td>
+					</tr>
+					<tr th:each="directory,stat : ${directoryList}" th:class="${0 == stat.count % 2} ? 'odd pointer' : 'even pointer'">
+						<td th:text="${directory.path}"></td>
+						<td th:text="${directory.countThreshold}"></td>
+						<td th:text="${directory.containSubdirectory}"></td>
+                        <td th:text="${directory.server.ip} + ':' + ${directory.server.description}"></td>
+						<td>
+							<a class="btn btn-info btn-round" th:href="@{'/directories/toUpdate/' + ${directory.id} }">
+								<i class="fa fa-edit"> 修改</i>
+							</a>
+							<a class="btn btn-danger btn-round" th:href="@{'/directories/delete/' + ${directory.id} }">
+								<i class="fa fa-trash"> 删除</i>
+							</a>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr class="headings">
+						<th class="column-title">路径</th>
+						<th class="column-title">数据阀值</th>
+						<th class="column-title">是否包含子目录</th>
+						<th class="column-title">服务器信息</th>
+						<th class="column-title">操作</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+<div th:replace="partial :: common_js(~{})"></div>
+</body>
+</html>

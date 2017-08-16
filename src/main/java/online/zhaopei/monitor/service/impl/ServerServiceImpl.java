@@ -25,8 +25,8 @@ public class ServerServiceImpl implements ServerService {
 	private ServerRepository serverRepository;
 	
 	@Override
-	public void save(Server server) {
-		this.serverRepository.save(server);
+	public Server save(Server server) {
+		return this.serverRepository.save(server);
 	}
 
 	@Override

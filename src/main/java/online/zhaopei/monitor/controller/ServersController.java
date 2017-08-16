@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import online.zhaopei.monitor.domain.Directory;
 import online.zhaopei.monitor.domain.Server;
 import online.zhaopei.monitor.domain.ServerInfo;
+import online.zhaopei.monitor.service.DirectoryService;
 import online.zhaopei.monitor.service.ServerService;
 import online.zhaopei.monitor.util.CommonUtil;
 import online.zhaopei.monitor.util.HttpClientTool;
@@ -22,6 +24,9 @@ public class ServersController {
 	
 	@Autowired
 	private ServerService serverService;
+	
+	@Autowired
+	private DirectoryService directoryService;
 	
 	@RequestMapping
 	public ModelAndView info(String ip, String port) {
@@ -67,7 +72,7 @@ public class ServersController {
 	
 	@RequestMapping("/toSave")
 	public ModelAndView toSave() {
-		ModelAndView mv  = new ModelAndView("form");
+		ModelAndView mv  = new ModelAndView("server/form");
 		List<Server> serverList = this.serverService.findAll();
 		mv.addObject("serverList", serverList);
 		mv.addObject("server", new Server());
@@ -76,7 +81,7 @@ public class ServersController {
 	
 	@RequestMapping("/toUpdate/{id}")
 	public ModelAndView toUpdate(@PathVariable Long id) {
-		ModelAndView mv  = new ModelAndView("form");
+		ModelAndView mv  = new ModelAndView("server/form");
 		List<Server> serverList = this.serverService.findAll();
 		mv.addObject("serverList", serverList);
 		mv.addObject("server", this.serverService.getOne(id));
@@ -85,7 +90,7 @@ public class ServersController {
 	
 	@RequestMapping("/list")
 	public ModelAndView list(Server server) {
-		ModelAndView mv  = new ModelAndView("list");
+		ModelAndView mv  = new ModelAndView("server/list");
 		List<Server> serverList = this.serverService.findServerList(server);
 		mv.addObject("serverList", serverList);
 		return mv;
@@ -94,7 +99,7 @@ public class ServersController {
 	@RequestMapping("/save")
 	@ResponseBody
 	public ModelAndView save(Server server) {
-		this.serverService.save(server);
+		Server s = this.serverService.save(server);
 		CommonUtil.generateSetting(this.serverService.findAll());
 		return new ModelAndView("redirect:/list");
 	}

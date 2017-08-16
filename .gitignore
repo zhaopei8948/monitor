@@ -20,3 +20,5 @@ alert
 # Package Files #
 *.war
 *.ear
+servers.json
+servers.xml

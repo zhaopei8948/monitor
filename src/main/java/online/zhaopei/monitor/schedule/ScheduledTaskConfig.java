@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import online.zhaopei.monitor.Application;
 import online.zhaopei.monitor.domain.Alert;
+import online.zhaopei.monitor.domain.Directory;
 import online.zhaopei.monitor.domain.FileSystemInfo;
 import online.zhaopei.monitor.domain.Server;
 import online.zhaopei.monitor.service.ServerService;
@@ -49,22 +50,38 @@ public class ScheduledTaskConfig {
 			url = "http://" + s.getIp() + ":" + s.getPort() + "/";
 			try {
 				mem = HttpClientTool.getMemJson(url);
-				if (s.getMemoryThreshold() < mem.getUsedPercent()) {
+				double usedPercent = mem.getUsedPercent();
+				logger.info("memoryTHreshold=" + s.getMemoryThreshold() + "[]" + usedPercent);
+				if (s.getMemoryThreshold() < usedPercent) {
 					CommonUtil.generateAlert(new Alert(Calendar.getInstance().getTime(), s.getIp(), "内存", 
-							"服务器[" + s.getIp() + "] 内存使用率超过" + s.getMemoryThreshold() + "%"));
+							"服务器[" + s.getIp() + "] 内存使用率超过[" + s.getMemoryThreshold() + "%]"));
 				}
 				
 				cpuPerc = HttpClientTool.getCpuPercJson(url);
-				if (s.getCpuThreshold() / 100 < 1 - cpuPerc.getIdle()) {
+				double used = (1 - cpuPerc.getIdle()) * 100;
+				logger.info("cpuThreshold=" + s.getCpuThreshold() + "[]" + used);
+				if (s.getCpuThreshold() < used) {
 					CommonUtil.generateAlert(new Alert(Calendar.getInstance().getTime(), s.getIp(), "CPU", 
-							"服务器[" + s.getIp() + "] CPU使用率超过" + s.getCpuThreshold() + "%"));
+							"服务器[" + s.getIp() + "] CPU使用率超过[" + s.getCpuThreshold() + "%]"));
 				}
 				
 				fileSystemInfoList = HttpClientTool.getFileSystemInfoListJson(url);
 				for (FileSystemInfo fsi : fileSystemInfoList) {
-					if (s.getHardDiskThreshold() / 100 < fsi.getFileSystemUsage().getUsePercent()) {
+					double usePercent = fsi.getFileSystemUsage().getUsePercent() * 100;
+					logger.info("hardDiskThreshold=" + s.getHardDiskThreshold() + "[]" + usePercent);
+					if (s.getHardDiskThreshold() < usePercent) {
 						CommonUtil.generateAlert(new Alert(Calendar.getInstance().getTime(), s.getIp(), "硬盘", 
-								"服务器[" + s.getIp() + "] 硬盘[" + fsi.getFileSystem().getDevName() + "] 使用率超过" + s.getHardDiskThreshold() + "%"));
+								"服务器[" + s.getIp() + "] 硬盘[" + fsi.getFileSystem().getDevName() + "] 使用率超过[" + s.getHardDiskThreshold() + "%]"));
+					}
+				}
+				
+				for (Directory d : s.getDirectoryList()) {
+					int fileCount = HttpClientTool.getDirectoryFileCount(url, d.getPath(), d.getContainSubdirectory());
+					logger.info("countTHreshold=" + d.getCountThreshold() + "[]" + fileCount);
+					if (d.getCountThreshold() < HttpClientTool.getDirectoryFileCount(url, d.getPath(), d.getContainSubdirectory())) {
+						CommonUtil.generateAlert(new Alert(Calendar.getInstance().getTime(), s.getIp(), "目录", 
+								"服务器[" + s.getIp() + "] 目录[" + d.getPath() + "] 下的文件(" + (d.getContainSubdirectory() ? "" : "不")
+						+ "包含子目录)个数超过[" + d.getCountThreshold() + "]实际有[" + fileCount + "]"));
 					}
 				}
 			} catch (Exception e) {

@@ -7,7 +7,7 @@ import online.zhaopei.monitor.domain.Server;
 
 public interface ServerService extends Serializable {
 
-	void save(Server server);
+	Server save(Server server);
 	
 	void save(Iterable<Server> iterable);
 	

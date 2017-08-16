@@ -1,6 +1,8 @@
 package online.zhaopei.monitor.util;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,6 +44,15 @@ public final class HttpClientTool {
 	
 	public static OperatingSystem getOperatingSystemJson(String url) {
 		return getJson(url + "osInfo", OperatingSystem.class);
+	}
+	
+	public static Integer getDirectoryFileCount(String url, String directory, boolean containSubdirectory) {
+		try {
+			return Integer.valueOf(get(url + "getDirectoryFileCount?directory=" + URLEncoder.encode(directory, "utf-8") + "&containSubdirectory=" + containSubdirectory));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
 	}
 	
 	public static List<FileSystemInfo> getFileSystemInfoListJson(String url) {

@@ -18,6 +18,7 @@ spring:
         showSql: true
     thymeleaf:
         cache: false
+    jackson.serialization.FAIL_ON_EMPTY_BEANS: false
 
 logging:
     file: monitor.log

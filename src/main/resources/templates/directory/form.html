@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partial :: common_header(~{::title}, ~{}, ~{})">
+    <title>新建配置项</title>
+</head>
+<body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div th:replace="partial :: left_col"></div>
+
+        <!-- top navigation -->
+        <div th:replace="partial :: top_nav"></div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>新建配置项</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <br>
+                            <form id="demo-form2" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="" method="POST" action="/directories/save">
+                                <input th:if="${null != directory.id}" type="hidden" name="id" th:value="${directory.id}" />
+                                <div th:replace="partial :: form-line('路径', 'path', true, ${directory.path})"></div>
+                                <div th:replace="partial :: form-line('数量阀值', 'countThreshold', true, ${directory.countThreshold})"></div>
+                                <div th:replace="partial :: form-radio('是否包含子目录', 'containSubdirectory', 'true', '包含', 'false', '不包含', ${null == directory.containSubdirectory ? true : directory.containSubdirectory})"></div>
+                                <div th:replace="partial :: form-line-select('所属服务器', 'serverId', true, ${null == directory.server ? '' : directory.server.id}, ${serverMap})"></div>
+                                <div class="ln_solid"></div>
+                                <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                        <button class="btn btn-primary" type="button" onclick="window.location.href='/directories/list'">取消</button>
+                                        <button class="btn btn-primary" type="reset">重置</button>
+                                        <button type="submit" class="btn btn-success">提交</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer th:replace="partial :: footer"></footer>
+    </div>
+</div>
+<div th:replace="partial :: common_js(~{})"></div>
+</body>
+</html>
