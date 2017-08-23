@@ -25,3 +25,6 @@ logging:
     level:
         org.springframework: INFO
         online.zhaopei.monitor: TRACE
+
+monitor:
+    maxAlert: 10

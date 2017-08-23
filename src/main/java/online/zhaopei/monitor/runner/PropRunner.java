@@ -31,7 +31,6 @@ public class PropRunner implements CommandLineRunner {
 			Servers ss = (Servers) um.unmarshal(br);
 			SERVER_LIST = ss.getServerList();
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		
 	}

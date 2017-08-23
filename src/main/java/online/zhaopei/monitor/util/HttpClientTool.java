@@ -1,7 +1,6 @@
 package online.zhaopei.monitor.util;
 
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +9,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.hyperic.sigar.Cpu;
@@ -101,6 +101,12 @@ public final class HttpClientTool {
 		String result = null;
 		InputStream inputStream = null;
 		try {
+			RequestConfig defaultRequestConfig = RequestConfig.custom()
+					.setSocketTimeout(10000)
+					.setConnectTimeout(10000)
+					.setConnectionRequestTimeout(10000)
+					.build();
+			httpget.setConfig(defaultRequestConfig);
 			HttpResponse response  = client.execute(httpget);
 			if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
 				HttpEntity entity = response.getEntity();
