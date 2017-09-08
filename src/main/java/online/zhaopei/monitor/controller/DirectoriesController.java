@@ -78,6 +78,7 @@ public class DirectoriesController {
 		mv.addObject("serverList", this.serverService.findAll());
 		mv.addObject("server", this.serverService.getOne(id));
 		mv.addObject("serverMap", serverMap);
+		mv.addObject("directory", this.directoryService.getOne(id));
 		return mv;
 	}
 }
